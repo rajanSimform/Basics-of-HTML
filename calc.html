@@ -11,9 +11,9 @@
 <link rel="stylesheet" href="calc.css">
 </head>
 <body>
-    <div class="container mt-5 w-25">
+    <div class="container mt-5 w-25 shadow-lg pt-3">
         <div class="outputContainer border">
-            <div type="text" class="col text-end" name="screen" id="screen"> </div>
+            <div type="text" class="text-end" name="screen" id="screen"> </div>
         </div>
 
         <div class="inputContainer mt-3">
@@ -23,64 +23,74 @@
                 <div class="col"></div>       
             </div>
             <div class="row">
-                <div class="col border btn disabled">MC</div>
-                <div class="col border btn disabled">MR</div>
-                <div class="col border btn">M+</div>
-                <div class="col border btn">M-</div>
-                <div class="col border btn">MS</div>
+                <div class="col border btn disabled" id="mc" onclick=mmClear()>MC</div>
+                <div class="col border btn disabled" id="mr" onclick=mmRecall()>MR</div>
+                <div class="col border btn" id="m+" onclick=mmAdd()>M+</div>
+                <div class="col border btn" id="m-" onclick=mmSub()>M-</div>
+                <div class="col border btn" id="ms" onclick=mmStore()>MS</div>
             </div>
-            <div class="row">
-                <div class="col border btn">Trignometry <i class="fa fa-angle-down"></i> </div>
-                <div class="col border btn">Functions <i class="fa fa-angle-down"></i> </div>
+            <div class="row dropdown">
+                <div class="col border btn dropbtn" onclick=dropdowntoogle(id) id="trig">Trignometry <i class="fa fa-angle-down"></i> </div>
+                    <div id="trig-menu" class="dropdown-content">
+                        <div class="btn" id="sin" onclick=onDropnBtnClick(id)>Sin</div>
+                        <div class="btn" id="cos" onclick=onDropnBtnClick(id)>Cos</div>
+                        <div class="btn" id="tan" onclick=onDropnBtnClick(id)>Tan</div>
+                    </div>
+                <div class="col border btn dropbtn" onclick=dropdowntoogle(id) id="func">Functions <i class="fa fa-angle-down"></i> </div>
+                    <div id="func-menu" class="dropdown-content">
+                        <div class="btn" id="floor" onclick=onDropnBtnClick(id)>Floor</div>
+                        <div class="btn" id="ceil" onclick=onDropnBtnClick(id)>Celling</div>
+                        <div class="btn" id="round" onclick=onDropnBtnClick(id)>Round</div>
+                    </div>
             </div>
             <div class="row">
                 <div class="col border btn">2<sup>nd</sup></div>
-                <div class="col border btn">π</div>
-                <div class="col border btn">e</div>
+                <div class="col border btn" id="mathPI" onclick="screen.innerHTML+='π'">π</div>
+                <div class="col border btn" id="mathE" onclick="screen.innerHTML+='e'">e</div>
                 <div class="col border btn" onclick=clrscr()>C</div>
                 <div class="col border btn" onclick=backspace()><i class="far fa-backspace"></i></div>
             </div>
             <div class="row">
                 <div class="col border btn" id="sqrt" onclick="screen.innerHTML+='^2'">x<sup>2</sup></div>
-                <div class="col border btn">1/x</div>
-                <div class="col border btn">|x|</div>
-                <div class="col border btn">exp</div>
-                <div class="col border btn">mod</div>
+                <div class="col border btn" id="invbtn" onclick="screen.innerHTML+='1&div;'">1/x</div>
+                <div class="col border btn" id="absbtn" onclick="screen.innerHTML+='abs '">|x|</div>
+                <div class="col border btn" id="expbtn" onclick="screen.innerHTML+='e^'">exp</div>
+                <div class="col border btn" id="modbtn" onclick="screen.innerHTML+='%'">mod</div>
             </div>
             <div class="row">
-                <div class="col border btn" id="sqrt" onclick="screen.innerHTML='√'+screen.innerHTML"><i class="far fa-square-root"></i></div>
+                <div class="col border btn" id="sqrt" onclick="screen.innerHTML+='√'"><i class="far fa-square-root"></i></div>
                 <div class="col border btn" id="bopen" onclick="screen.innerHTML+='('">(</div>
                 <div class="col border btn" id="bclose" onclick="screen.innerHTML+=')'">)</div>
                 <div class="col border btn" id="factbtn" onclick="screen.innerHTML+='!'">n!</div>
-                <div class="col border btn" id="divbtn" onclick="screen.innerHTML+='&div;'">&div;</div>
+                <div class="col border btn sign" id="divbtn" onclick="screen.innerHTML+='&div;'">&div;</div>
             </div>
             <div class="row">
                 <div class="col border btn" id="powbtn" onclick="screen.innerHTML+='^'">x<sup>y</sup></div>
                 <div class="col border btn digits" id="7" onclick="screen.innerHTML+=id">7</div>
                 <div class="col border btn digits" id="8" onclick="screen.innerHTML+=id">8</div>
                 <div class="col border btn digits" id="9" onclick="screen.innerHTML+=id">9</div>
-                <div class="col border btn" id="mulbtn" onclick="screen.innerHTML+='*'">×</div>
+                <div class="col border btn sign" id="mulbtn" onclick="screen.innerHTML+='*'">×</div>
             </div>
             <div class="row">
                 <div class="col border btn" id="10powbtn" onclick="screen.innerHTML+='10^'">10<sup>x</sup></div>
                 <div class="col border btn digits" id="4" onclick="screen.innerHTML+=id">4</div>
                 <div class="col border btn digits" id="5" onclick="screen.innerHTML+=id">5</div>
                 <div class="col border btn digits" id="6" onclick="screen.innerHTML+=id">6</div>
-                <div class="col border btn" id="subtn" onclick="screen.innerHTML+='-'">-</div>
+                <div class="col border btn sign" id="subtn" onclick="screen.innerHTML+='-'">-</div>
             </div>
             <div class="row">
-                <div class="col border btn">log</div>
+                <div class="col border btn" id="logbtn" onclick="screen.innerHTML+='log '">log</div>
                 <div class="col border btn digits" id="1" onclick="screen.innerHTML+=id">1</div>
                 <div class="col border btn digits" id="2" onclick="screen.innerHTML+=id">2</div>
                 <div class="col border btn digits" id="3" onclick="screen.innerHTML+=id">3</div>
-                <div class="col border btn" id="addbtn" onclick="screen.innerHTML+='+'">+</div>
+                <div class="col border btn sign" id="addbtn" onclick="screen.innerHTML+='+'">+</div>
             </div> 
             <div class="row">
-                <div class="col border btn">ln</div>
+                <div class="col border btn" id="lnbtn" onclick="screen.innerHTML+='ln '">ln</div>
                 <div class="col border btn">+/-</div>
                 <div class="col border btn digits" id="0" onclick="screen.innerHTML+=id">0</div>
-                <div class="col border btn" id="dotbtn" onclick="screen.innerHTML+='.'">.</div>
-                <div class="col border btn" id="equalto" onclick=calculate()>=</div>
+                <div class="col border btn sign" id="dotbtn" onclick="screen.innerHTML+='.'">.</div>
+                <div class="col border btn sign" id="equalto" onclick=calculate()>=</div>
             </div>
         </div>
     </div>
