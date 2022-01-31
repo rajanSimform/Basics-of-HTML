@@ -168,7 +168,7 @@ let calculate = () => {
   let expression = evaluate(screen.innerHTML);
   let ans = eval(expression);
   // function getRepetend(num) {
-  //   let m = (num+'').match(/\.(\d*?)(\d+?)\2+$/);
+  //   let m = (num+'').match(/\.(\d*?)(\d{3,})\2+/);
   //   return m && {pattern: +m[2], index: m[1].length};
   // }
   // let pattern = getRepetend(ans)
