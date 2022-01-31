@@ -16,25 +16,25 @@ const Maths = {
   ROUND: "round ",
 };
 
-function backspace() {
+let backspace = () => {
   let str = screen.innerHTML;
   screen.innerHTML = str.slice(0, str.length - 1);
-}
+};
 
-function clrscr() {
+let clrscr = () => {
   screen.innerHTML = "";
-}
+};
 
-function MathDotFact(str, cb, eleArray) {
+let MathDotFact = (str, cb, eleArray) => {
   //replace all fact and give its real value(ans)
   eleArray.forEach((ele) => {
     let temp = `${cb}(${ele})`;
     str = str.replace(ele + "!", temp);
   });
   return str;
-}
+};
 
-function fact(str) {
+let fact = (str) => {
   let oprand = [];
   //check if factorial is there in str
   if (str.search("!") != -1) {
@@ -68,22 +68,22 @@ function fact(str) {
     //console.log(oprand)
   }
   return oprand;
-}
+};
 
-function mathFun(str, cb, s, angle="") {
+let mathFun = (str, cb, s, angle = "") => {
   //console.log(str,cb,s,angle);
   let oprand = [];
   //check if func is there in str
-  if (str.search(s.toSring) != -1) {
+  if (str.search(s.toSring) !== -1) {
     let found = [];
-    //found index of each occurance of func
+    //found index of each occurance of func and push into found[]
     for (let i = 0; i < str.length - s.length + 1; i++) {
       if (str.substring(i, s.length + i) === s) {
         found.push(i);
       }
     }
 
-    //find the oparand to which it is applied
+    //find the oparand to which func is applied
     found.forEach((ele) => {
       let start = ele + s.length; //starting index
       let pCount = 0; //for parenthesis
@@ -127,9 +127,9 @@ function mathFun(str, cb, s, angle="") {
       return str;
     }
   }
-}
+};
 
-function evaluate(str) {
+let evaluate = (str) => {
   let newstr = "";
 
   newstr = str.replace("÷", "/");
@@ -146,7 +146,7 @@ function evaluate(str) {
   newstr = mathFun(newstr, "Math.round", Maths.ROUND);
 
   if (angleMode.innerHTML === Maths.DEG) {
-    newstr = mathFun(newstr, "Math.sin", Maths.SIN , Maths.DEG);
+    newstr = mathFun(newstr, "Math.sin", Maths.SIN, Maths.DEG);
     newstr = mathFun(newstr, "Math.cos", Maths.COS, Maths.DEG);
     newstr = mathFun(newstr, "Math.tan", Maths.TAN, Maths.DEG);
   } else {
@@ -162,38 +162,49 @@ function evaluate(str) {
   newstr = MathDotFact(newstr, "factorial", factEle);
   // console.log(newstr)
   return newstr;
-}
+};
 
-function calculate() {
+let calculate = () => {
   let expression = evaluate(screen.innerHTML);
+  let ans = eval(expression);
+  // function getRepetend(num) {
+  //   let m = (num+'').match(/\.(\d*?)(\d+?)\2+$/);
+  //   return m && {pattern: +m[2], index: m[1].length};
+  // }
+  // let pattern = getRepetend(ans)
+  // console.log(pattern);
+  // if(pattern){
+  //   if(pattern.index === 0) pattern.index = 1;
+  //   ans = ans.toFixed(pattern.index)
+  // }
   console.log(expression);
-  screen.innerHTML = eval(expression);
-}
+  screen.innerHTML = isNaN(ans) ? "Something went wrong" : ans;
+};
 
-function angleToogle() {
+let angleToogle = () => {
   if (angleMode.innerHTML === Maths.DEG) {
     angleMode.innerHTML = Maths.RED;
   } else {
     angleMode.innerHTML = Maths.DEG;
   }
-}
+};
 
-function dropdowntoogle(id) {
+let dropdowntoogle = (id) => {
   document.getElementById(`${id}-menu`).classList.toggle("show");
-}
+};
 
-function onDropnBtnClick(id) {
+let onDropnBtnClick = (id) => {
   screen.innerHTML += `${id} `;
   if (id === "sin" || id === "cos" || id === "tan") {
     dropdowntoogle("trig");
   } else {
     dropdowntoogle("func");
   }
-}
+};
 
 //this if IIFI for soring memory functions and variables
-let Memory=(
-  function (){
+let Memory = (
+  function () {
     let currentMemory = "0";
     function mmStore() {
       let expression = evaluate(screen.innerHTML);
@@ -238,7 +249,7 @@ let Memory=(
       mmAdd,
       mmSub,
       mmClear,
-      mmRecall
-    }
+      mmRecall,
+    };
   }
 )();
