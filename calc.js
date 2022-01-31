@@ -10,10 +10,10 @@ const Maths = {
   TAN: "tan ",
   LOG: "log ",
   LN: "ln ",
-  ABS: "abs ",
-  FLOOR: "floor ",
-  CEIL: "ceil ",
-  ROUND: "round ",
+  ABS: "ABS ",
+  FLOOR: "FLOOR ",
+  CEIL: "CEIL ",
+  ROUND: "ROUND ",
 };
 
 let backspace = () => {
@@ -37,7 +37,7 @@ let MathDotFact = (str, cb, eleArray) => {
 let fact = (str) => {
   let oprand = [];
   //check if factorial is there in str
-  if (str.search("!") != -1) {
+  if (str.search("!") !== -1) {
     let factFound = [];
     str.split("").forEach((ele, index) => {
       if (ele === "!") {
@@ -135,15 +135,7 @@ let evaluate = (str) => {
   newstr = str.replace("÷", "/");
   newstr = newstr.replace("^", "**");
   newstr = newstr.replace("π", "Math.PI");
-
-  newstr = mathFun(newstr, "Math.sqrt", "√");
-  newstr = mathFun(newstr, "Math.log10", Maths.LOG);
-  newstr = mathFun(newstr, "Math.log", Maths.LN);
-  newstr = mathFun(newstr, "Math.abs", Maths.ABS);
-
-  newstr = mathFun(newstr, "Math.ceil", Maths.CEIL);
-  newstr = mathFun(newstr, "Math.floor", Maths.FLOOR);
-  newstr = mathFun(newstr, "Math.round", Maths.ROUND);
+  newstr = newstr.replace("e", "Math.E");
 
   if (angleMode.innerHTML === Maths.DEG) {
     newstr = mathFun(newstr, "Math.sin", Maths.SIN, Maths.DEG);
@@ -155,8 +147,14 @@ let evaluate = (str) => {
     newstr = mathFun(newstr, "Math.tan", Maths.TAN, Maths.RED);
   }
 
-  // here "e" is char so Ceil function call should not be disturbed
-  newstr = newstr.replace("e", "Math.E");
+  newstr = mathFun(newstr, "Math.sqrt", "√");
+  newstr = mathFun(newstr, "Math.log10", Maths.LOG);
+  newstr = mathFun(newstr, "Math.log", Maths.LN);
+  newstr = mathFun(newstr, "Math.abs", Maths.ABS);
+
+  newstr = mathFun(newstr, "Math.ceil", Maths.CEIL);
+  newstr = mathFun(newstr, "Math.floor", Maths.FLOOR);
+  newstr = mathFun(newstr, "Math.round", Maths.ROUND);
 
   let factEle = fact(newstr);
   newstr = MathDotFact(newstr, "factorial", factEle);
@@ -167,16 +165,18 @@ let evaluate = (str) => {
 let calculate = () => {
   let expression = evaluate(screen.innerHTML);
   let ans = eval(expression);
-  // function getRepetend(num) {
-  //   let m = (num+'').match(/\.(\d*?)(\d{3,})\2+/);
-  //   return m && {pattern: +m[2], index: m[1].length};
-  // }
-  // let pattern = getRepetend(ans)
-  // console.log(pattern);
-  // if(pattern){
-  //   if(pattern.index === 0) pattern.index = 1;
-  //   ans = ans.toFixed(pattern.index)
-  // }
+  // func for finding repeating pattern in decimals
+  let getRepetend = (num) => {
+    let m = (num + "").match(/\.(\d*?)(\d+)\2{3}/);
+    return m && { pattern: +m[2], index: m[1].length };
+  }
+  let pFound = getRepetend(ans);
+  //console.log(pFound);
+  // round off the value from index of repeating element
+  if (pFound) {
+    if (pFound.index === 0) pFound.index = 2;
+    ans = ans.toFixed(pFound.index);
+  }
   console.log(expression);
   screen.innerHTML = isNaN(ans) ? "Something went wrong" : ans;
 };
@@ -206,43 +206,43 @@ let onDropnBtnClick = (id) => {
 let Memory = (
   function () {
     let currentMemory = "0";
-    function mmStore() {
+    let mmStore = () => {
       let expression = evaluate(screen.innerHTML);
-      if (eval(expression) != undefined) currentMemory = eval(expression);
+      if (eval(expression) !== undefined) currentMemory = eval(expression);
       else currentMemory = "0";
-      console.log("current memory stored as :" + currentMemory);
+      console.log("current memory stored as : " + currentMemory);
       document.getElementById("mc").classList.remove("disabled");
       document.getElementById("mr").classList.remove("disabled");
     }
 
-    function mmClear() {
+    let mmClear = () => {
       currentMemory = "0";
-      console.log("current memory reset to 0:" + currentMemory);
+      console.log("current memory reset to 0: " + currentMemory);
       document.getElementById("mc").classList.add("disabled");
       document.getElementById("mr").classList.add("disabled");
     }
 
-    function mmRecall() {
+    let mmRecall = () => {
       screen.innerHTML = currentMemory;
-      console.log("Current Memory :" + currentMemory);
+      console.log("Current Memory : " + currentMemory);
     }
 
-    function mmAdd() {
+    let mmAdd = () => {
       let expression = evaluate(screen.innerHTML);
       let added = eval(expression);
       currentMemory += added;
       screen.innerHTML = currentMemory;
       console.log(`${added} is added to current memory.`);
-      console.log("Current Memory :" + currentMemory);
+      console.log("Current Memory : " + currentMemory);
     }
 
-    function mmSub() {
+    let mmSub = () => {
       let expression = evaluate(screen.innerHTML);
       let sub = eval(expression);
       currentMemory -= sub;
       screen.innerHTML = currentMemory;
       console.log(`${sub} is subtracted from current memory.`);
-      console.log("Current Memory :" + currentMemory);
+      console.log("Current Memory : " + currentMemory);
     }
     return {
       mmStore,
