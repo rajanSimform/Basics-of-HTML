@@ -132,10 +132,10 @@ let mathFun = (str, cb, s, angle = "") => {
 let evaluate = (str) => {
   let newstr = "";
 
-  newstr = str.replace("÷", "/");
-  newstr = newstr.replace("^", "**");
-  newstr = newstr.replace("π", "Math.PI");
-  newstr = newstr.replace("e", "Math.E");
+  newstr = str.replaceAll("÷", "/");
+  newstr = newstr.replaceAll("^", "**");
+  newstr = newstr.replaceAll("π", "Math.PI");
+  newstr = newstr.replaceAll("e", "Math.E");
 
   if (angleMode.innerHTML === Maths.DEG) {
     newstr = mathFun(newstr, "Math.sin", Maths.SIN, Maths.DEG);
