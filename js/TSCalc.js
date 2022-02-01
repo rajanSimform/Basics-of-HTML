@@ -16,6 +16,9 @@ const Maths = {
     CEIL: "CEIL ",
     ROUND: "ROUND ",
 };
+const ErrorMsg = {
+    BadInput: "Bad Input",
+};
 let backspace = () => {
     let str = calcScreen.innerHTML;
     calcScreen.innerHTML = str.slice(0, str.length - 1);
@@ -181,7 +184,7 @@ let calculate = () => {
     }
     else {
         if (typeof ans === "number" && isNaN(ans)) {
-            calcScreen.innerHTML = "Bad Input";
+            calcScreen.innerHTML = ErrorMsg.BadInput;
         }
         else {
             calcScreen.innerHTML = ans.toString();
@@ -213,9 +216,9 @@ let Memory = (function () {
     let currentMemory = 0;
     let mmStore = () => {
         let expression = evaluate(calcScreen.innerHTML);
-        (eval(expression) !== undefined && typeof eval(expression) === "number")
-            ? currentMemory = eval(expression)
-            : currentMemory = 0;
+        eval(expression) !== undefined && typeof eval(expression) === "number"
+            ? (currentMemory = eval(expression))
+            : (currentMemory = 0);
         console.log("current memory stored as : " + currentMemory);
         document.getElementById("mc").classList.remove("disabled");
         document.getElementById("mr").classList.remove("disabled");

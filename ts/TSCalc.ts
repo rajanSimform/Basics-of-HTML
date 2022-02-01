@@ -1,7 +1,7 @@
 const calcScreen = document.getElementById("calcScreen") as HTMLDivElement;
 const angleMode = document.getElementById("angleMode") as HTMLButtonElement;
 const symbols: string[] = ["+", "-", "*", "/"];
-const factorial = (n:number):number => (n <= 0 ? 1 : n * factorial(n - 1));
+const factorial = (n: number): number => (n <= 0 ? 1 : n * factorial(n - 1));
 const Maths = {
   DEG: "DEG",
   RED: "RED",
@@ -15,17 +15,20 @@ const Maths = {
   CEIL: "CEIL ",
   ROUND: "ROUND ",
 };
+const ErrorMsg = {
+  BadInput: "Bad Input",
+};
 
-let backspace = ():void => {
+let backspace = (): void => {
   let str = calcScreen.innerHTML;
   calcScreen.innerHTML = str.slice(0, str.length - 1);
 };
 
-let clrscr = ():void => {
+let clrscr = (): void => {
   calcScreen.innerHTML = "";
 };
 
-let MathDotFact = (str:string, cb:string, eleArray:string[]):string => {
+let MathDotFact = (str: string, cb: string, eleArray: string[]): string => {
   //replace all fact and give its real value(ans)
   eleArray.forEach((ele) => {
     let temp = `${cb}(${ele})`;
@@ -34,11 +37,11 @@ let MathDotFact = (str:string, cb:string, eleArray:string[]):string => {
   return str;
 };
 
-let fact = (str:string):string[] => {
-  let oprand:string[] = [];
+let fact = (str: string): string[] => {
+  let oprand: string[] = [];
   //check if factorial is there in str
   if (str.search("!") !== -1) {
-    let factFound:number[] = [];
+    let factFound: number[] = [];
     str.split("").forEach((ele, index) => {
       if (ele === "!") {
         factFound.push(index);
@@ -70,12 +73,12 @@ let fact = (str:string):string[] => {
   return oprand;
 };
 
-let mathFun = (str:string, cb:string, s:string, angle = ""):string => {
+let mathFun = (str: string, cb: string, s: string, angle = ""): string => {
   //console.log(str,cb,s,angle);
-  let oprand:string[] = [];
+  let oprand: string[] = [];
   //check if func is there in str
   if (str.search(s) !== -1) {
-    let found:number[] = [];
+    let found: number[] = [];
     //found index of each occurance of func and push into found[]
     for (let i = 0; i < str.length - s.length + 1; i++) {
       if (str.substring(i, s.length + i) === s) {
@@ -104,7 +107,7 @@ let mathFun = (str:string, cb:string, s:string, angle = ""):string => {
     });
 
     if (angle === Maths.DEG) {
-      let degAngle:string[] = [];
+      let degAngle: string[] = [];
       oprand.forEach((ele) => {
         let prev = ele;
         ele = ((eval(ele) * Math.PI) / 180).toString();
@@ -130,7 +133,7 @@ let mathFun = (str:string, cb:string, s:string, angle = ""):string => {
   return str;
 };
 
-let evaluate = (str:string):string => {
+let evaluate = (str: string): string => {
   let newstr = "";
 
   newstr = str.replace(/÷/g, "/");
@@ -163,15 +166,14 @@ let evaluate = (str:string):string => {
   return newstr;
 };
 
-let calculate = () => {  
-
+let calculate = () => {
   let expression = evaluate(calcScreen.innerHTML);
   console.log(expression);
-  
-  let ans:number|string= eval(expression);
-  
+
+  let ans: number | string = eval(expression);
+
   // func for finding repeating pattern in decimals
-  let getRepetend = (num:number|string) => {
+  let getRepetend = (num: number | string) => {
     let m = (num + "").match(/\.(\d*?)(\d+)\2{4,}/);
 
     //  \. matches the decimal dot.
@@ -180,10 +182,10 @@ let calculate = () => {
     // \2{4,} matches repetitions of the repetend 3 or more times.
 
     return m && { pattern: +m[2], index: m[1].length };
-  }
+  };
 
   let pFound = getRepetend(ans);
-  
+
   // round off the value from index of repeating element
   if (pFound && typeof ans === "number") {
     if (pFound.index === 0) pFound.index = 2;
@@ -191,12 +193,12 @@ let calculate = () => {
   }
   //console.log(typeof ans, ans);
 
-  if(typeof ans === undefined){
-    calcScreen.innerHTML = "";  
-  }else{
-    if(typeof ans === "number" && isNaN(ans)){
-      calcScreen.innerHTML = "Bad Input"
-    }else{
+  if (typeof ans === undefined) {
+    calcScreen.innerHTML = "";
+  } else {
+    if (typeof ans === "number" && isNaN(ans)) {
+      calcScreen.innerHTML = ErrorMsg.BadInput;
+    } else {
       calcScreen.innerHTML = ans.toString();
     }
   }
@@ -210,11 +212,11 @@ let angleToogle = () => {
   }
 };
 
-let dropdowntoogle = (id:string) => {
+let dropdowntoogle = (id: string) => {
   document.getElementById(`${id}-menu`)!.classList.toggle("show");
 };
 
-let onDropnBtnClick = (id:string) => {
+let onDropnBtnClick = (id: string) => {
   calcScreen.innerHTML += `${id} `;
   if (id === "sin" || id === "cos" || id === "tan") {
     dropdowntoogle("trig");
@@ -226,28 +228,28 @@ let onDropnBtnClick = (id:string) => {
 //this if IIFI for soring memory functions and variables
 let Memory = (
   function () {
-    let currentMemory:number = 0;
+    let currentMemory: number = 0;
     let mmStore = () => {
       let expression = evaluate(calcScreen.innerHTML);
-      (eval(expression) !== undefined && typeof eval(expression) === "number") 
-        ? currentMemory = eval(expression)
-        :currentMemory = 0;
+      eval(expression) !== undefined && typeof eval(expression) === "number"
+        ? (currentMemory = eval(expression))
+        : (currentMemory = 0);
       console.log("current memory stored as : " + currentMemory);
       document.getElementById("mc")!.classList.remove("disabled");
       document.getElementById("mr")!.classList.remove("disabled");
-    }
+    };
 
     let mmClear = () => {
       currentMemory = 0;
       console.log("current memory reset to 0: " + currentMemory);
       document.getElementById("mc")!.classList.add("disabled");
       document.getElementById("mr")!.classList.add("disabled");
-    }
+    };
 
     let mmRecall = () => {
       calcScreen.innerHTML = currentMemory.toString();
       console.log("Current Memory : " + currentMemory);
-    }
+    };
 
     let mmAdd = () => {
       let expression = evaluate(calcScreen.innerHTML);
@@ -256,7 +258,7 @@ let Memory = (
       calcScreen.innerHTML = currentMemory.toString();
       console.log(`${added} is added to current memory.`);
       console.log("Current Memory : " + currentMemory);
-    }
+    };
 
     let mmSub = () => {
       let expression = evaluate(calcScreen.innerHTML);
@@ -265,7 +267,7 @@ let Memory = (
       calcScreen.innerHTML = currentMemory.toString();
       console.log(`${sub} is subtracted from current memory.`);
       console.log("Current Memory : " + currentMemory);
-    }
+    };
     return {
       mmStore,
       mmAdd,
